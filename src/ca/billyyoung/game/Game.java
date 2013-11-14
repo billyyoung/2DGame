@@ -2,7 +2,6 @@ package ca.billyyoung.game;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -10,6 +9,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+import ca.billyyoung.game.entities.Player;
 import ca.billyyoung.game.gfx.Screen;
 import ca.billyyoung.game.level.Level;
 
@@ -33,6 +33,7 @@ public class Game extends Canvas implements Runnable {
 	private Screen screen;
 	public InputHandler input;
 	private Level level;
+	private Player player;
 
 	public Game() {
 		setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
@@ -72,6 +73,8 @@ public class Game extends Canvas implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		player = new Player(level, 0, 0, input, "Billy");
+		player.setSpeed(2);
 	}
 
 	// start
@@ -90,8 +93,7 @@ public class Game extends Canvas implements Runnable {
 	// tick
 	// updates variables
 	public void tick() {
-		tickCount++;
-
+		/*
 		if (input.up.isPressed()) {
 			screen.yOffset--;
 		}
@@ -103,12 +105,14 @@ public class Game extends Canvas implements Runnable {
 		}
 		if (input.right.isPressed()) {
 			screen.xOffset++;
-		}
-
+		}*/
+		level.tick();
+		player.tick();
 		// testing pixels[]
 		/*
 		 * for (int i=0; i<pixels.length; i++) { pixels[i] = i + tickCount; }
 		 */
+		tickCount++;
 	} // tick
 
 	// render
@@ -128,9 +132,7 @@ public class Game extends Canvas implements Runnable {
 		 */
 		Graphics g = bs.getDrawGraphics();
 		level.render(g);
-		//g.setColor(Color.RED);
-		//g.fillRect(0, 0, getWidth(), getHeight());
-		//g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		player.render(g);
 		g.dispose();
 		bs.show();
 
